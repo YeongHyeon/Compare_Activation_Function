@@ -66,20 +66,20 @@ test_acc_list_he = []
 test_loss_list_he = []
 
 print("\nTraining")
-for i in range(1000):
+for i in range(10000):
     batch = mnist.train.next_batch(50)
     if i%100 == 0:
         test_batch = mnist.test.next_batch(50)
 
         train_accuracy_relu = accuracy_relu.eval(feed_dict={
             x:batch[0], y_: batch[1], keep_prob: 1.0})
-        train_loss_relu = cross_entropy_relu.eval(feed_dict={
-            x:batch[0], y_: batch[1], keep_prob: 1.0})
+        train_loss_relu = np.nan_to_num(cross_entropy_relu.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0}))
 
         test_accuracy_relu = accuracy_relu.eval(feed_dict={
             x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
-        test_loss_relu = cross_entropy_relu.eval(feed_dict={
-            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+        test_loss_relu = np.nan_to_num(cross_entropy_relu.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0}))
 
         train_acc_list_relu.append(train_accuracy_relu)
         train_loss_list_relu.append(train_loss_relu)
@@ -88,13 +88,13 @@ for i in range(1000):
 
         train_accuracy_sigmoid = accuracy_sigmoid.eval(feed_dict={
             x:batch[0], y_: batch[1], keep_prob: 1.0})
-        train_loss_sigmoid = cross_entropy_sigmoid.eval(feed_dict={
-            x:batch[0], y_: batch[1], keep_prob: 1.0})
+        train_loss_sigmoid = np.nan_to_num(cross_entropy_sigmoid.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0}))
 
         test_accuracy_sigmoid = accuracy_sigmoid.eval(feed_dict={
             x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
-        test_loss_sigmoid = cross_entropy_sigmoid.eval(feed_dict={
-            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+        test_loss_sigmoid = np.nan_to_num(cross_entropy_sigmoid.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0}))
 
         train_acc_list_sigmoid.append(train_accuracy_sigmoid)
         train_loss_list_sigmoid.append(train_loss_sigmoid)
@@ -103,13 +103,13 @@ for i in range(1000):
 
         train_accuracy_he = accuracy_he.eval(feed_dict={
             x:batch[0], y_: batch[1], keep_prob: 1.0})
-        train_loss_he = cross_entropy_he.eval(feed_dict={
-            x:batch[0], y_: batch[1], keep_prob: 1.0})
+        train_loss_he = np.nan_to_num(cross_entropy_he.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0}))
 
         test_accuracy_he = accuracy_he.eval(feed_dict={
             x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
-        test_loss_he = cross_entropy_he.eval(feed_dict={
-            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+        test_loss_he = np.nan_to_num(cross_entropy_he.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0}))
 
         train_acc_list_he.append(train_accuracy_he)
         train_loss_list_he.append(train_loss_he)
