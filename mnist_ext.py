@@ -15,8 +15,8 @@ def save_graph_as_image(train_list, test_list, ylabel="", label1="train", label2
 
     x = np.arange(len(train_list))
     plt.clf()
-    plt.plot(x, train_list, label=label1+" "+ylabel, linestyle='--')
-    plt.plot(x, test_list, label=label2+" "+ylabel, linestyle='--')
+    plt.plot(x, train_list, label=label1, linestyle='--')
+    plt.plot(x, test_list, label=label2, linestyle='--')
     plt.xlabel("step")
     plt.ylabel(ylabel)
     plt.ylim(-0.1, max([1, max(train_list), max(test_list)])*1.1)
@@ -130,8 +130,8 @@ save_graph_as_image(train_list=train_loss_list_sigmoid, test_list=test_loss_list
 save_graph_as_image(train_list=train_acc_list_he, test_list=test_acc_list_he, ylabel="Accuracy", cate="He")
 save_graph_as_image(train_list=train_loss_list_he, test_list=test_loss_list_he, ylabel="Loss", cate="He")
 
-save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_sigmoid, ylabel="Accuracy", cate="R_VS_S")
-save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_sigmoid, ylabel="Loss", cate="R_VS_S")
+save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_sigmoid, ylabel="Accuracy", label1="ReLU", label2="Sigmoid", cate="R_VS_S")
+save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_sigmoid, ylabel="Loss", label1="ReLU", label2="Sigmoid", cate="R_VS_S")
 
-save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_he, ylabel="Accuracy", cate="R_VS_H")
-save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_he, ylabel="Loss", cate="R_VS_H")
+save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_he, ylabel="Accuracy", label1="ReLU", label2="He", cate="R_VS_H")
+save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_he, ylabel="Loss", label1="ReLU", label2="He", cate="R_VS_H")

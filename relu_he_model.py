@@ -4,8 +4,8 @@ import numpy as np
 def he_initializer(input_dim):
     return np.sqrt(2)/np.sqrt(input_dim)
 
-def weight_variable(shape, stdev=0.1):
-    initial = tf.truncated_normal(shape, stddev=stdev)
+def weight_variable(shape):
+    initial = tf.truncated_normal(shape, stddev=0.1)
     return tf.Variable(initial)
 
 def bias_variable(shape):
