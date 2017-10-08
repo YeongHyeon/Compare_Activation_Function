@@ -1,4 +1,4 @@
-<h1>Compare_Vanishing_Gradient</h1>
+<h1>Compare Vanishing Gradient</h1>
 
 <p>
 <img src="readme/log.png"></br>
