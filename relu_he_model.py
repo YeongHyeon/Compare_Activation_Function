@@ -1,7 +1,10 @@
 import tensorflow as tf
 
-def weight_variable(shape):
-    initial = tf.truncated_normal(shape, stddev=0.1)
+def he_stdev():
+    return 0.1
+
+def weight_variable(shape, stdev=0.1):
+    initial = tf.truncated_normal(shape, stddev=stdev)
     return tf.Variable(initial)
 
 def bias_variable(shape):
@@ -36,21 +39,21 @@ def model(x=None, y_=None, keep_prob=None):
     W_conv6 = weight_variable([5, 5, 32, 64])
     b_conv6 = bias_variable([64])
 
-    h_conv1 = tf.nn.sigmoid(conv2d(x_image, W_conv1) + b_conv1)
-    h_conv2 = tf.nn.sigmoid(conv2d(h_conv1, W_conv2) + b_conv2)
-    h_conv3 = tf.nn.sigmoid(conv2d(h_conv2, W_conv3) + b_conv3)
+    h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
+    h_conv2 = tf.nn.relu(conv2d(h_conv1, W_conv2) + b_conv2)
+    h_conv3 = tf.nn.relu(conv2d(h_conv2, W_conv3) + b_conv3)
     h_pool1 = max_pool_2x2(h_conv3)
 
-    h_conv4 = tf.nn.sigmoid(conv2d(h_pool1, W_conv4) + b_conv4)
-    h_conv5 = tf.nn.sigmoid(conv2d(h_conv4, W_conv5) + b_conv5)
-    h_conv6 = tf.nn.sigmoid(conv2d(h_conv5, W_conv6) + b_conv6)
+    h_conv4 = tf.nn.relu(conv2d(h_pool1, W_conv4) + b_conv4)
+    h_conv5 = tf.nn.relu(conv2d(h_conv4, W_conv5) + b_conv5)
+    h_conv6 = tf.nn.relu(conv2d(h_conv5, W_conv6) + b_conv6)
     h_pool2 = max_pool_2x2(h_conv6)
 
     W_fc1 = weight_variable([7 * 7 * 64, 1024])
     b_fc1 = bias_variable([1024])
 
     h_pool2_flat = tf.reshape(h_pool2, [-1, 7*7*64])
-    h_fc1 = tf.nn.sigmoid(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+    h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
     h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 

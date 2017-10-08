@@ -7,15 +7,16 @@ from datetime import datetime
 
 import relu_model
 import sigmoid_model
+import relu_he_model
 
-def save_graph_as_image(train_list, test_list, ylabel=""):
+def save_graph_as_image(train_list, test_list, ylabel="", label1="train", label2="test", cate="None"):
 
-    print(" Save "+ylabel+" graph in ./graph")
+    print("Save "+ylabel+" graph in ./graph")
 
     x = np.arange(len(train_list))
     plt.clf()
-    plt.plot(x, train_list, label="train "+ylabel)
-    plt.plot(x, test_list, label="test "+ylabel, linestyle='--')
+    plt.plot(x, train_list, label=label1+" "+ylabel, linestyle='--')
+    plt.plot(x, test_list, label=label2+" "+ylabel, linestyle='--')
     plt.xlabel("step")
     plt.ylabel(ylabel)
     plt.ylim(-0.1, max([1, max(train_list), max(test_list)])*1.1)
@@ -31,8 +32,8 @@ def save_graph_as_image(train_list, test_list, ylabel=""):
         pass
     now = datetime.now()
 
-    # plt.savefig("./graph/"+now.strftime('%Y%m%d_%H%M%S%f')+"_"+ylabel+".png")
-    plt.show()
+    plt.savefig("./graph/"+now.strftime('%Y%m%d_%H%M%S%f')+"_"+cate+"_"+ylabel+".png")
+    # plt.show()
 
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
@@ -45,6 +46,7 @@ keep_prob = tf.placeholder(tf.float32)
 
 train_step_relu, accuracy_relu, cross_entropy_relu = relu_model.model(x=x, y_=y_, keep_prob=keep_prob)
 train_step_sigmoid, accuracy_sigmoid, cross_entropy_sigmoid = sigmoid_model.model(x=x, y_=y_, keep_prob=keep_prob)
+train_step_he, accuracy_he, cross_entropy_he = relu_he_model.model(x=x, y_=y_, keep_prob=keep_prob)
 
 sess.run(tf.global_variables_initializer())
 
@@ -53,6 +55,17 @@ train_loss_list_relu = []
 test_acc_list_relu = []
 test_loss_list_relu = []
 
+train_acc_list_sigmoid = []
+train_loss_list_sigmoid = []
+test_acc_list_sigmoid = []
+test_loss_list_sigmoid = []
+
+train_acc_list_he = []
+train_loss_list_he = []
+test_acc_list_he = []
+test_loss_list_he = []
+
+print("\nTraining")
 for i in range(1000):
     batch = mnist.train.next_batch(50)
     if i%100 == 0:
@@ -73,11 +86,52 @@ for i in range(1000):
         test_acc_list_relu.append(test_accuracy_relu)
         test_loss_list_relu.append(test_loss_relu)
 
-        print("step %d, training accuracy \t%g \t%g"%(i, train_accuracy_relu, train_loss_relu))
+        train_accuracy_sigmoid = accuracy_sigmoid.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0})
+        train_loss_sigmoid = cross_entropy_sigmoid.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0})
+
+        test_accuracy_sigmoid = accuracy_sigmoid.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+        test_loss_sigmoid = cross_entropy_sigmoid.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+
+        train_acc_list_sigmoid.append(train_accuracy_sigmoid)
+        train_loss_list_sigmoid.append(train_loss_sigmoid)
+        test_acc_list_sigmoid.append(test_accuracy_sigmoid)
+        test_loss_list_sigmoid.append(test_loss_sigmoid)
+
+        train_accuracy_he = accuracy_he.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0})
+        train_loss_he = cross_entropy_he.eval(feed_dict={
+            x:batch[0], y_: batch[1], keep_prob: 1.0})
+
+        test_accuracy_he = accuracy_he.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+        test_loss_he = cross_entropy_he.eval(feed_dict={
+            x:test_batch[0], y_: test_batch[1], keep_prob: 1.0})
+
+        train_acc_list_he.append(train_accuracy_he)
+        train_loss_list_he.append(train_loss_he)
+        test_acc_list_he.append(test_accuracy_he)
+        test_loss_list_he.append(test_loss_he)
+
+        print("step %d, training accuracy | %.4f %2.4f |%.4f %2.4f |%.4f %2.4f"%(i, train_accuracy_relu, train_loss_relu, train_accuracy_sigmoid, train_loss_sigmoid, train_accuracy_he, train_loss_he))
     train_step_relu.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+    train_step_sigmoid.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+    train_step_he.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
 
-save_graph_as_image(train_list=train_acc_list_relu, test_list=test_acc_list_relu, ylabel="Accuracy")
-save_graph_as_image(train_list=train_loss_list_relu, test_list=test_loss_list_relu, ylabel="Loss")
+save_graph_as_image(train_list=train_acc_list_relu, test_list=test_acc_list_relu, ylabel="Accuracy", cate="ReLU")
+save_graph_as_image(train_list=train_loss_list_relu, test_list=test_loss_list_relu, ylabel="Loss", cate="ReLU")
 
-print("test accuracy %g"%accuracy_relu.eval(feed_dict={
-    x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
+save_graph_as_image(train_list=train_acc_list_sigmoid, test_list=test_acc_list_sigmoid, ylabel="Accuracy", cate="Sigmoid")
+save_graph_as_image(train_list=train_loss_list_sigmoid, test_list=test_loss_list_sigmoid, ylabel="Loss", cate="Sigmoid")
+
+save_graph_as_image(train_list=train_acc_list_he, test_list=test_acc_list_he, ylabel="Accuracy", cate="He")
+save_graph_as_image(train_list=train_loss_list_he, test_list=test_loss_list_he, ylabel="Loss", cate="He")
+
+save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_sigmoid, ylabel="Accuracy", cate="R_VS_S")
+save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_sigmoid, ylabel="Loss", cate="R_VS_S")
+
+save_graph_as_image(train_list=train_acc_list_relu, test_list=train_acc_list_he, ylabel="Accuracy", cate="R_VS_H")
+save_graph_as_image(train_list=train_loss_list_relu, test_list=train_loss_list_he, ylabel="Loss", cate="R_VS_H")
