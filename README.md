@@ -3,7 +3,8 @@
 <p>
 <img src="readme/log.png"></br>
 The log of training process.</br>
-Two from the left. ReLU, Sigmoid, ReLU with He initialization.</br>
+Two(Accuracy and Cross entropy loss) from the left.</br>
+ReLU, Sigmoid, ReLU with He initialization.</br>
 </p>
 
 <p>
