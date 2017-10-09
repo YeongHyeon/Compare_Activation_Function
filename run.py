@@ -66,7 +66,7 @@ test_acc_list_he = []
 test_loss_list_he = []
 
 print("\nTraining")
-for i in range(10000):
+for i in range(1000):
     batch = mnist.train.next_batch(50)
     if i%100 == 0:
         test_batch = mnist.test.next_batch(50)
@@ -116,7 +116,7 @@ for i in range(10000):
         test_acc_list_he.append(test_accuracy_he)
         test_loss_list_he.append(test_loss_he)
 
-        print("step %d, training accuracy | %.4f %2.4f |%.4f %2.4f |%.4f %2.4f"%(i, train_accuracy_relu, train_loss_relu, train_accuracy_sigmoid, train_loss_sigmoid, train_accuracy_he, train_loss_he))
+        print("step %4d, training accuracy | %.4f %2.4f |%.4f %2.4f |%.4f %2.4f"%(i, train_accuracy_relu, train_loss_relu, train_accuracy_sigmoid, train_loss_sigmoid, train_accuracy_he, train_loss_he))
     train_step_relu.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
     train_step_sigmoid.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
     train_step_he.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
