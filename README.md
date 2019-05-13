@@ -1,4 +1,4 @@
-<h1>Compare Vanishing Gradient</h1>
+<h1>Compare Activation Function</h1>
 
 <p>
 <img src="readme/log.png"></br>
